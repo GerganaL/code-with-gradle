@@ -1,41 +1,58 @@
 package demo.resources;
 
 import demo.entities.Event;
-import demo.entities.Service;
+import demo.service.EventService;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
-@Path("/events")
+@Path("/event")
 @Produces(value = MediaType.APPLICATION_JSON)
 public class EventResource {
 
-    private Set<Event> events = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+    @Inject
+    EventService events;
 
-    public EventResource(){
-        Service service = new Service("demo service","this is a demo", BigDecimal.valueOf(10));
-        Set<Service> services = new HashSet<>();
-        services.add(service);
-        events.add(new Event("status ok","demo type","tile","client name",10,"here is some free text",services));
+
+    @GET
+    @Path("/listEvents")
+    public List<Event> listEvents() {
+        return events.getAllEvents();
     }
 
     @GET
-    public Set<Event> listEvents(){
-        return events;
+    @Path("/getCount")
+    public long countEvents() {
+        return events.getEventsCount();
+    }
+
+    @GET
+    @Path("/getById/{id}")
+    public Event getEventById(@PathParam Long id){
+      return  events.getEventById(id);
     }
 
     @POST
     @Transactional
     @Consumes(value = MediaType.APPLICATION_JSON)
-    public Set<Event> addEvent(Event event){
-        events.add(event);
-        return events;
+    @Path("/addEvents")
+    public Event addEvent(Event event) throws Exception {
+        events.addEvent(event);
+        return event;
     }
 
+    @DELETE
+    @Transactional
+    @Path("/deleteEvent")
+    public boolean deleteEvent(@PathParam Long id) {
+        return events.deleteEvent(id);
+    }
+
+
 }
+

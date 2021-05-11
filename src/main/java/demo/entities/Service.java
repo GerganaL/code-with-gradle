@@ -1,6 +1,5 @@
 package demo.entities;
 
-
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
@@ -8,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
 
 @Entity
 @Table(name = "services")
@@ -19,14 +17,14 @@ public class Service extends PanacheEntityBase {
     private String name;
     private String description;
     private BigDecimal price;
-    @ManyToMany(targetEntity = Event.class, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Event.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "service_event",
-            joinColumns = @JoinColumn(name = "service_id",referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id")
     )
     private Set<Event> events = new HashSet<>();
 
-    public Service(){
+    public Service() {
 
     }
 
@@ -34,7 +32,7 @@ public class Service extends PanacheEntityBase {
         this.name = name;
         this.description = description;
         this.price = price;
-      //  this.events = events;
+        //  this.events = events;
     }
 
     public String getName() {

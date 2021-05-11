@@ -3,8 +3,11 @@ package demo.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,14 +18,16 @@ public class Event extends PanacheEntityBase {
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
      private Long id;
-     private LocalDateTime startTime = LocalDateTime.now();
-     private LocalDateTime endTime = LocalDateTime.now();
+
+     private Date startTime;
+     private Date endTime;
      private  String status;
      private String type;
      private String title;
      private String clientName;
      private int guestsCount;
      private String freeText;
+    @JsonbTransient
      @ManyToMany(mappedBy = "events")
      private Set<Service> service = new HashSet<>();
 
@@ -39,7 +44,7 @@ public class Event extends PanacheEntityBase {
           this.service = service;
      }
 
-     public Event(Long id, LocalDateTime startTime, LocalDateTime endTime, String status, String type, String title, String clientName, int guestsCount, String freeText, Set<Service> service) {
+     public Event(Long id, Date startTime, Date endTime, String status, String type, String title, String clientName, int guestsCount, String freeText, Set<Service> service) {
           this.id = id;
           this.startTime = startTime;
           this.endTime = endTime;
@@ -52,19 +57,19 @@ public class Event extends PanacheEntityBase {
           this.service = service;
      }
 
-     public LocalDateTime getStartTime() {
+     public Date getStartTime() {
           return startTime;
      }
 
-     public void setStartTime(LocalDateTime startTime) {
+     public void setStartTime(Date startTime) {
           this.startTime = startTime;
      }
 
-     public LocalDateTime getEndTime() {
+     public Date getEndTime() {
           return endTime;
      }
 
-     public void setEndTime(LocalDateTime endTime) {
+     public void setEndTime(Date endTime) {
           this.endTime = endTime;
      }
 
